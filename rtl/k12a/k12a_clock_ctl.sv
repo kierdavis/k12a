@@ -1,3 +1,6 @@
+`include "iverilog-compat.inc.sv"
+`include "k12a.inc.sv"
+
 module k12a_clock_ctl(
     input   logic               sys_clock,
     input   logic               reset_n,
