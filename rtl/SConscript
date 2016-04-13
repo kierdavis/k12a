@@ -1,0 +1,18 @@
+import os
+
+sources = set()
+include_dirs = set()
+
+for root, dirnames, filenames in os.walk("."):
+    for filename in filenames:
+        if filename.endswith(".sv") and not filename.endswith(".inc.sv"):
+            sources.add(os.path.join(root, filename))
+        elif filename.endswith(".inc.sv"):
+            include_dirs.add(os.path.abspath(root))
+
+Import("env")
+env = env.Clone()
+env.Append(
+    IVERILOGFLAGS = ["-g2009", "-Wall", "-sk12a_tb"] + ["-I%s" % include_dir for include_dir in include_dirs],
+)
+k12a_tb = env.IVerilog("k12a_tb", list(sources))
