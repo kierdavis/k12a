@@ -2,6 +2,8 @@
 
 module k12a_tb;
 
+    parameter ROM_INIT_FILE = "programs/count.rmh.dat";
+
     logic clock;
     logic reset_n;
 
@@ -16,7 +18,7 @@ module k12a_tb;
     logic [7:0] lcd_data;
 
     k12a #(
-        .ROM_INIT_FILE("k12a_tb_rom.rmh.txt")
+        .ROM_INIT_FILE(ROM_INIT_FILE)
     ) k12a(
         .sys_clock(clock),
         .reset_n(reset_n),
