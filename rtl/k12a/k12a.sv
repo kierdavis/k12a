@@ -54,6 +54,9 @@ module k12a(
     logic [15:0]        pc;
     logic               pc_load;
     logic               pc_store;
+    logic               skip;
+    skip_sel_t          skip_sel;
+    logic               skip_store;
     state_t             state;
 
     k12a_clock_ctl clock_ctl(
@@ -64,9 +67,9 @@ module k12a(
     );
 
     k12a_control_logic control_logic(
-        .alu_condition(alu_condition),
         .inst(inst),
         .state(state),
+        .skip(skip),
         .a_load(a_load),
         .a_store(a_store),
         .acu_input1_sel(acu_input1_sel),
@@ -90,7 +93,9 @@ module k12a(
         .mem_mode(mem_mode),
         .next_state(next_state),
         .pc_load(pc_load),
-        .pc_store(pc_store)
+        .pc_store(pc_store),
+        .skip_sel(skip_sel),
+        .skip_store(skip_store)
     );
     
     k12a_acu acu(
@@ -119,6 +124,15 @@ module k12a(
         .reset_n(reset_n),
         .next_state(next_state),
         .state(state)
+    );
+    
+    k12a_skip_reg skip_reg(
+        .cpu_clock(cpu_clock),
+        .reset_n(reset_n),
+        .alu_condition(alu_condition),
+        .skip_sel(skip_sel),
+        .skip_store(skip_store),
+        .skip(skip)
     );
     
     k12a_pc_reg pc_reg(

@@ -2,9 +2,9 @@
 `include "k12a.inc.sv"
 
 module k12a_control_logic(
-    input   logic               alu_condition,
     input   logic [15:0]        inst,
     input   state_t             state,
+    input   logic               skip,
     
     output  logic               a_load,
     output  logic               a_store,
@@ -29,7 +29,9 @@ module k12a_control_logic(
     output  mem_mode_t          mem_mode,
     output  state_t             next_state,
     output  logic               pc_load,
-    output  logic               pc_store
+    output  logic               pc_store,
+    output  skip_sel_t          skip_sel,
+    output  logic               skip_store
 );
     
     `ALWAYS_COMB begin
@@ -57,16 +59,31 @@ module k12a_control_logic(
         next_state = state;
         pc_load = 1'h0;
         pc_store = 1'h0;
+        skip_sel = SKIP_SEL_0;
+        skip_store = 1'h0;
         
         case (state)
             STATE_FETCH1: begin
-                // addr_bus = pc
-                pc_load = 1'h1;
+                if (skip) begin
+                    // addr_bus = pc + 2
+                    acu_input1_sel = ACU_INPUT1_SEL_PC;
+                    acu_input2_sel = ACU_INPUT2_SEL_0002;
+                    acu_load = 1'h1;
+                    // pc <- addr_bus
+                    pc_store = 1'h1;
+                end
+                else begin
+                    // addr_bus = pc
+                    pc_load = 1'h1;
+                end
                 // data_bus = M[addr_bus]
                 mem_enable = 1'h1;
                 mem_mode = MEM_MODE_READ;
                 // inst_high <- data_bus
                 inst_high_store = 1'h1;
+                // skip <- 0
+                skip_sel = SKIP_SEL_0;
+                skip_store = 1'h1;
                 
                 next_state = STATE_FETCH2;
             end
@@ -215,16 +232,11 @@ module k12a_control_logic(
                         end
                         
                         4'h8, 4'h9, 4'hA, 4'hB: begin // sk/ski/skn/skni instruction
-                            // addr_bus = pc + 2
-                            acu_input1_sel = ACU_INPUT1_SEL_PC;
-                            acu_input2_sel = ACU_INPUT2_SEL_0002;
-                            acu_load = 1'h1;
-                            // compute ALU(a, b/i) and check condition
+                            // compute ALU(a, b / i)
                             alu_operand_sel = inst[12] ? ALU_OPERAND_SEL_INST : ALU_OPERAND_SEL_B;
-                            if (inst[13] ? ~alu_condition : alu_condition) begin
-                                // pc <- addr_bus
-                                pc_store = 1'h1;
-                            end
+                            // skip <- alu_condition / ~alu_condition
+                            skip_sel = inst[13] ? SKIP_SEL_CONDITION_INVERTED : SKIP_SEL_CONDITION;
+                            skip_store = 1'h1;
                         end
                         
                         4'hC, 4'hD: begin // rjmp/rcall instruction

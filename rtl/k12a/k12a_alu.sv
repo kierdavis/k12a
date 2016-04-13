@@ -62,7 +62,6 @@ module k12a_alu(
         endcase
     end
     
-    /*
     `ALWAYS_COMB begin
         alu_condition = 1'hx;
         case (inst[10:8])
@@ -76,7 +75,5 @@ module k12a_alu(
             3'h7: alu_condition = sle;
         endcase
     end
-    */
-    assign alu_condition = 1'h0;
 
 endmodule
