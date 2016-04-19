@@ -29,8 +29,10 @@ module k12a_io(
     input   logic               spi1_miso
 );
 
-    logic [7:0] sevenseg0_buffer, sevenseg0_decoded;
-    logic [7:0] sevenseg1_buffer, sevenseg1_decoded;
+    logic [7:0] sevenseg0_buffer;
+    logic [7:0] sevenseg1_buffer;
+    logic [6:0] sevenseg0_decoded;
+    logic [6:0] sevenseg1_decoded;
     logic [4:0] control;
     logic [7:0] lcd_buffer;
     
@@ -47,8 +49,8 @@ module k12a_io(
     logic spi1_begin;
     logic spi1_busy;
     
-    assign sevenseg0 = sevenseg0_mode ? sevenseg0_decoded : sevenseg0_buffer;
-    assign sevenseg1 = sevenseg1_mode ? sevenseg1_decoded : sevenseg1_buffer;
+    assign sevenseg0 = sevenseg0_mode ? {1'h0, sevenseg0_decoded} : sevenseg0_buffer;
+    assign sevenseg1 = sevenseg1_mode ? {1'h0, sevenseg1_decoded} : sevenseg1_buffer;
     
     assign lcd_rw = 1'h0;
     assign lcd_en = lcd_xfer & async_write;
@@ -88,49 +90,15 @@ module k12a_io(
         end
     end
     
-    `ALWAYS_COMB begin
-        sevenseg0_decoded = 8'hxx;
-        case (sevenseg0_buffer[3:0])
-            4'h0: sevenseg0_decoded = 8'b0_1111110;
-            4'h1: sevenseg0_decoded = 8'b0_0110000;
-            4'h2: sevenseg0_decoded = 8'b0_1101101;
-            4'h3: sevenseg0_decoded = 8'b0_1111001;
-            4'h4: sevenseg0_decoded = 8'b0_0110011;
-            4'h5: sevenseg0_decoded = 8'b0_1011011;
-            4'h6: sevenseg0_decoded = 8'b0_1011111;
-            4'h7: sevenseg0_decoded = 8'b0_1110000;
-            4'h8: sevenseg0_decoded = 8'b0_1111111;
-            4'h9: sevenseg0_decoded = 8'b0_1111011;
-            4'hA: sevenseg0_decoded = 8'b0_1110111;
-            4'hB: sevenseg0_decoded = 8'b0_0011111;
-            4'hC: sevenseg0_decoded = 8'b0_1001110;
-            4'hD: sevenseg0_decoded = 8'b0_0111101;
-            4'hE: sevenseg0_decoded = 8'b0_1001111;
-            4'hF: sevenseg0_decoded = 8'b0_1000111;
-        endcase
-    end
+    k12a_sevenseg_decoder sevenseg0_decoder(
+        .digit(sevenseg0_buffer[3:0]),
+        .segments(sevenseg0_decoded)
+    );
     
-    `ALWAYS_COMB begin
-        sevenseg1_decoded = 8'hxx;
-        case (sevenseg1_buffer[3:0])
-            4'h0: sevenseg1_decoded = 8'b0_1111110;
-            4'h1: sevenseg1_decoded = 8'b0_0110000;
-            4'h2: sevenseg1_decoded = 8'b0_1101101;
-            4'h3: sevenseg1_decoded = 8'b0_1111001;
-            4'h4: sevenseg1_decoded = 8'b0_0110011;
-            4'h5: sevenseg1_decoded = 8'b0_1011011;
-            4'h6: sevenseg1_decoded = 8'b0_1011111;
-            4'h7: sevenseg1_decoded = 8'b0_1110000;
-            4'h8: sevenseg1_decoded = 8'b0_1111111;
-            4'h9: sevenseg1_decoded = 8'b0_1111011;
-            4'hA: sevenseg1_decoded = 8'b0_1110111;
-            4'hB: sevenseg1_decoded = 8'b0_0011111;
-            4'hC: sevenseg1_decoded = 8'b0_1001110;
-            4'hD: sevenseg1_decoded = 8'b0_0111101;
-            4'hE: sevenseg1_decoded = 8'b0_1001111;
-            4'hF: sevenseg1_decoded = 8'b0_1000111;
-        endcase
-    end
+    k12a_sevenseg_decoder sevenseg1_decoder(
+        .digit(sevenseg1_buffer[3:0]),
+        .segments(sevenseg1_decoded)
+    );
     
     k12a_spi spi0(
         .cpu_clock(cpu_clock),
