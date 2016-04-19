@@ -5,6 +5,8 @@ module k12a(
     input   logic               sys_clock,
     input   logic               reset_n,
     
+    output  logic               halted,
+    
     input   logic [7:0]         switches,
     input   logic [7:0]         buttons,
     output  logic [7:0]         leds,
@@ -64,6 +66,8 @@ module k12a(
     skip_sel_t          skip_sel;
     logic               skip_store;
     state_t             state;
+
+    assign halted = state == STATE_HALT;
 
     k12a_clock_ctl clock_ctl(
         .sys_clock(sys_clock),
