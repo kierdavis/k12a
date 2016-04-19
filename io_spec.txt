@@ -1,0 +1,29 @@
+Read:
+    0: switches
+    1: buttons
+    2: leds
+    3: stack
+    4: control signals
+    5: 
+    6: spi 0 data reg
+    7: spi 1 data reg
+
+Write:
+    0: seven seg 0 (lower digit)
+    1: seven seg 1 (upper digit)
+    2: leds
+    3: stack
+    4: control signals
+    5: lcd data reg
+    6: spi 0 data reg
+    7: spi 1 data reg
+
+control signals:
+    0: seven seg 0 render mode (0: segments; 1: hex digits)
+    1: seven seg 1 render mode (0: segments; 1: hex digits)
+    2: 
+    3: 
+    4: lcd register select
+    5: lcd xfer
+    6: spi 0 xfer (write) / busy (read)
+    7: spi 1 xfer (write) / busy (read)

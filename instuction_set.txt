@@ -1,0 +1,55 @@
+0000 0 --- ---- ----    inc     CD <- CD + 1
+0001 0 --- ---- -iii    in      A <- IO[i]
+0010 0 --- ---- ----    ld      A <- [CD]
+0011 0 --- iiii iiii    ldd     A <- [i]
+0100 0 --- ---- ----    dec     CD <- CD - 1
+0101 0 --- ---- -iii    out     IO[i] <- A
+0110 0 --- ---- ----    st      [CD] <- A
+0111 0 --- iiii iiii    std     [i] <- A
+
+1000 0 fff ---- ----    sk      conditional skip: compute A - B, skip if flag f
+1001 0 fff iiii iiii    ski     conditional skip: compute A - i, skip if flag f
+1010 0 fff ---- ----    skn     conditional skip: compute A - B, skip if not flag f
+1011 0 fff iiii iiii    skni    conditional skip: compute A - i, skip if not flag f
+1100 0 jjj jjjj jjjj    rjmp    PC <- PC + (j << 1) (relative to start of inst)
+1101 0 jjj jjjj jjjj    rcall   CD <- PC; PC <- PC + (j << 1) (relative to start of inst)
+1110 0 --- ---- ----    ljmp    PC <- CD
+1111 0 --- ---- ----    halt
+
+dd00 1 000 ---- ----    mov     d <- A
+dd00 1 001 ---- ----    mov     d <- A & B
+dd00 1 010 ---- ----    mov     d <- A | B
+dd00 1 011 ---- ----    mov     d <- A ^ B
+dd00 1 100 ---- ----    mov     d <- A + B
+dd00 1 101 ---- ----    mov     d <- A - B
+dd00 1 110 ---- ----    mov     d <- A >> 1 (arithmetic)
+dd00 1 111 ---- ----    mov     d <- B
+
+dd01 1 000 iiii iiii    mov     d <- A
+dd01 1 001 iiii iiii    mov     d <- A & i
+dd01 1 010 iiii iiii    mov     d <- A | i
+dd01 1 011 iiii iiii    mov     d <- A ^ i
+dd01 1 100 iiii iiii    mov     d <- A + i
+dd01 1 101 iiii iiii    mov     d <- A - i
+dd01 1 110 iiii iiii    mov     d <- A >> 1 (arithmetic)
+dd01 1 111 iiii iiii    mov     d <- i
+
+dd10 1 --- ---- ----    mov     d <- C
+
+dd11 1 --- ---- ----    mov     d <- D
+
+dd:
+    00: A
+    01: B
+    10: C
+    11: D
+
+fff:
+    000: zero (equal)
+    001: negative
+    010: borrow (ult)
+    011: overflow
+    100: borrow (ult)
+    101: ule
+    110: slt
+    111: sle
