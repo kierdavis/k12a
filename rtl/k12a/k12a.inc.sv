@@ -34,6 +34,16 @@ typedef enum logic [1:0] {
     SKIP_SEL_0
 } skip_sel_t;
 
+typedef enum logic {
+    SPI_DATA_SEL_DATA_BUS,
+    SPI_DATA_SEL_SHIFT
+} spi_data_sel_t;
+
+typedef enum logic {
+    SPI_STATE_IDLE,
+    SPI_STATE_XFER
+} spi_state_t;
+
 typedef enum logic [2:0] {
     STATE_FETCH1,
     STATE_FETCH2,

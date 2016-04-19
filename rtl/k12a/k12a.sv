@@ -13,7 +13,13 @@ module k12a(
     output  logic               lcd_rs,
     output  logic               lcd_rw,
     output  logic               lcd_en,
-    output  logic [7:0]         lcd_data
+    output  logic [7:0]         lcd_data,
+    output  logic               spi0_sck,
+    output  logic               spi0_mosi,
+    input   logic               spi0_miso,
+    output  logic               spi1_sck,
+    output  logic               spi1_mosi,
+    input   logic               spi1_miso
 );
 
     parameter ROM_INIT_FILE = "";
@@ -201,7 +207,13 @@ module k12a(
         .lcd_rs(lcd_rs),
         .lcd_rw(lcd_rw),
         .lcd_en(lcd_en),
-        .lcd_data(lcd_data)
+        .lcd_data(lcd_data),
+        .spi0_sck(spi0_sck),
+        .spi0_mosi(spi0_mosi),
+        .spi0_miso(spi0_miso),
+        .spi1_sck(spi1_sck),
+        .spi1_mosi(spi1_mosi),
+        .spi1_miso(spi1_miso)
     );
 
 endmodule

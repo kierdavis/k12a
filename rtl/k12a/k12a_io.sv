@@ -20,7 +20,13 @@ module k12a_io(
     output  logic               lcd_rs, // 0: instruction, 1: data
     output  logic               lcd_rw, // 0: write, 1: read
     output  logic               lcd_en,
-    output  logic [7:0]         lcd_data
+    output  logic [7:0]         lcd_data,
+    output  logic               spi0_sck,
+    output  logic               spi0_mosi,
+    input   logic               spi0_miso,
+    output  logic               spi1_sck,
+    output  logic               spi1_mosi,
+    input   logic               spi1_miso
 );
 
     logic [7:0] sevenseg0_buffer, sevenseg0_decoded;
@@ -32,6 +38,15 @@ module k12a_io(
     logic sevenseg1_mode;
     logic lcd_xfer;
     
+    logic spi0_data_io_load;
+    logic spi0_data_io_store;
+    logic spi0_begin;
+    logic spi0_busy;
+    logic spi1_data_io_load;
+    logic spi1_data_io_store;
+    logic spi1_begin;
+    logic spi1_busy;
+    
     assign sevenseg0 = sevenseg0_mode ? sevenseg0_decoded : sevenseg0_buffer;
     assign sevenseg1 = sevenseg1_mode ? sevenseg1_decoded : sevenseg1_buffer;
     
@@ -42,12 +57,19 @@ module k12a_io(
     assign sevenseg1_mode = control[1];
     assign lcd_rs = control[4];
     assign lcd_xfer = io_store & (io_addr == 3'h4) & data_bus[5];
+    assign spi0_begin = io_store & (io_addr == 3'h4) & data_bus[6];
+    assign spi1_begin = io_store & (io_addr == 3'h4) & data_bus[7];
     
     assign data_bus = (io_load & (io_addr == 3'h0)) ? switches : 8'hzz;
     assign data_bus = (io_load & (io_addr == 3'h1)) ? buttons : 8'hzz;
     assign data_bus = (io_load & (io_addr == 3'h2)) ? leds : 8'hzz;
-    assign data_bus = (io_load & (io_addr == 3'h4)) ? {3'h0, control} : 8'hzz;
+    assign data_bus = (io_load & (io_addr == 3'h4)) ? {spi1_busy, spi0_busy, 1'h0, control} : 8'hzz;
     assign data_bus = (io_load & (io_addr == 3'h5)) ? lcd_buffer : 8'hzz;
+    
+    assign spi0_data_io_load  = io_load  & (io_addr == 3'h6);
+    assign spi0_data_io_store = io_store & (io_addr == 3'h6);
+    assign spi1_data_io_load  = io_load  & (io_addr == 3'h7);
+    assign spi1_data_io_store = io_store & (io_addr == 3'h7);
     
     `ALWAYS_FF @(posedge cpu_clock or negedge reset_n) begin
         if (~reset_n) begin
@@ -109,5 +131,31 @@ module k12a_io(
             4'hF: sevenseg1_decoded = 8'b0_1000111;
         endcase
     end
+    
+    k12a_spi spi0(
+        .cpu_clock(cpu_clock),
+        .reset_n(reset_n),
+        .spi_data_io_load(spi0_data_io_load),
+        .spi_data_io_store(spi0_data_io_store),
+        .spi_begin(spi0_begin),
+        .spi_busy(spi0_busy),
+        .data_bus(data_bus),
+        .spi_sck(spi0_sck),
+        .spi_mosi(spi0_mosi),
+        .spi_miso(spi0_miso)
+    );
+    
+    k12a_spi spi1(
+        .cpu_clock(cpu_clock),
+        .reset_n(reset_n),
+        .spi_data_io_load(spi1_data_io_load),
+        .spi_data_io_store(spi1_data_io_store),
+        .spi_begin(spi1_begin),
+        .spi_busy(spi1_busy),
+        .data_bus(data_bus),
+        .spi_sck(spi1_sck),
+        .spi_mosi(spi1_mosi),
+        .spi_miso(spi1_miso)
+    );
 
 endmodule
