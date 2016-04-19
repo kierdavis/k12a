@@ -66,7 +66,7 @@ module k12a(
         .async_write(async_write)
     );
 
-    k12a_control_logic control_logic(
+    k12a_fsm fsm(
         .inst(inst),
         .state(state),
         .skip(skip),

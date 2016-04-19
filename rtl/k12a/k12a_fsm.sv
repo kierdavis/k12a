@@ -1,7 +1,7 @@
 `include "iverilog-compat.inc.sv"
 `include "k12a.inc.sv"
 
-module k12a_control_logic(
+module k12a_fsm(
     input   logic [15:0]        inst,
     input   state_t             state,
     input   logic               skip,
