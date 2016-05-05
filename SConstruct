@@ -4,7 +4,7 @@ env.Append(
     IVERILOGFLAGS = [],
     NIM = "nim",
     NIMFLAGS = [],
-    NIMCFLAGS = ["--path:%s" % Dir("#tools").abspath],
+    NIMCFLAGS = ["--verbosity:0", "--path:%s" % Dir("#tools").abspath],
     PCB = "pcb",
     BUILDERS = {
         "IVerilog": Builder(action = "$IVERILOG $IVERILOGFLAGS -o$TARGET $SOURCES", suffix = ".vvp"),
