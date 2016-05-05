@@ -1,0 +1,10 @@
+v 20130925 2
+B 0 0 2500 1500 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+T 2600 200 8 10 0 0 0 0 1
+description=An IC module, containing space for a DIP16 socket as well as breakout pads and decoupling capacitors.
+T 2600 0 8 10 1 1 0 0 1
+refdes=U?
+T 1250 750 9 10 1 0 0 4 1
+ic-module
+T 2600 400 8 10 0 0 0 0 1
+source=ic-module.sch
