@@ -1,9 +1,11 @@
-0000 0 --- ---- ----    inc     CD <- CD + 1
+0000 0 0-- ---- ----    inc     CD <- CD + 1
+0-00 0 1-- ---- ----    getsp   CD <- SP
 0001 0 --- ---- -iii    in      A <- IO[i]
 0010 0 0-- ---- ----    ld      A <- [CD]
 0010 0 1-- ---- ----    pop     A <- [SP]; SP <- SP + 1
 0011 0 iii iiii iiii    ldd     A <- [SP + i]
-0100 0 --- ---- ----    dec     CD <- CD - 1
+0100 0 0-- ---- ----    dec     CD <- CD - 1
+0-00 0 1-- ---- ----    getsp   CD <- SP
 0101 0 --- ---- -iii    out     IO[i] <- A
 0110 0 0-- ---- ----    st      [CD] <- A
 0110 0 1-- ---- ----    push    SP <- SP - 1; [SP] <- A
@@ -15,7 +17,8 @@
 1011 0 fff iiii iiii    skni    conditional skip: compute A - i, skip if not flag f
 1100 0 jjj jjjj jjjj    rjmp    PC <- PC + (j << 1) (relative to start of inst)
 1101 0 jjj jjjj jjjj    rcall   CD <- PC; PC <- PC + (j << 1) (relative to start of inst)
-1110 0 --- ---- ----    ljmp    PC <- CD
+1110 0 0-- ---- ----    ljmp    PC <- CD
+1110 0 1-- ---- ----    putsp   SP <- CD
 1111 0 --- ---- ----    halt
 
 dd00 1 000 ---- ----    mov     d <- A

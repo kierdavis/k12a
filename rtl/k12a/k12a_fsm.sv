@@ -166,13 +166,19 @@ module k12a_fsm(
                 
                 else begin // not a mov instruction
                     case (inst[15:12]) // opcode
-                        4'h0, 4'h4: begin // inc/dec instruction
-                            // addr_bus = cd + 0x0001 (inc)
-                            //  or
-                            // addr_bus = cd + 0xFFFF (dec)
-                            acu_input1_sel = ACU_INPUT1_SEL_CD;
-                            acu_input2_sel = inst[14] ? ACU_INPUT2_SEL_FFFF : ACU_INPUT2_SEL_0001;
-                            acu_load = 1'h1;
+                        4'h0, 4'h4: begin // inc/dec/getsp instruction
+                            if (inst[10]) begin // getsp instruction
+                                // addr_bus = sp
+                                sp_load = 1'h1;
+                            end
+                            else begin // inc/dec instruction
+                                // addr_bus = cd + 0x0001 (inc)
+                                //  or
+                                // addr_bus = cd + 0xFFFF (dec)
+                                acu_input1_sel = ACU_INPUT1_SEL_CD;
+                                acu_input2_sel = inst[14] ? ACU_INPUT2_SEL_FFFF : ACU_INPUT2_SEL_0001;
+                                acu_load = 1'h1;
+                            end
                             // cd <- addr_bus
                             cd_sel = CD_SEL_ADDR_BUS;
                             c_store = 1'h1;
@@ -275,11 +281,18 @@ module k12a_fsm(
                             next_state = STATE_RJMP;
                         end
                         
-                        4'hE: begin // ljmp instruction
+                        4'hE: begin // ljmp/putsp instruction
                             // addr_bus = cd
                             cd_load = 1'h1;
-                            // pc <- addr_bus
-                            pc_store = 1'h1;
+                            
+                            if (inst[10]) begin // putsp instruction
+                                // sp <- addr_bus
+                                sp_store = 1'h1;
+                            end
+                            else begin // ljmp instruction
+                                // pc <- addr_bus
+                                pc_store = 1'h1;
+                            end
                         end
                         
                         4'hF: begin // halt instruction
