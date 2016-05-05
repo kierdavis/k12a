@@ -4,7 +4,7 @@ var element = Element(
   flags: {},
   description: "Two rows of 8 breakout pads",
   markPosition: fromMils(400, 100),
-  namePosition: fromMils(-350, 100),
+  namePosition: fromMils(-350, -60),
   nameRotation: 0,
   nameScale: 100,
   nameFlags: {},
@@ -42,16 +42,16 @@ for i in 0..7:
     number: number,
     flags: {},
   ).addTo(element)
-  let interconnectOffset = (x: fromMils(0), y: (nearPin.drillDiameter + nearPin.metalDiameter) / 4)
-  discard Pad(
-    pos1: nearPin.centerPos - interconnectOffset,
-    pos2: farPin.centerPos + interconnectOffset,
-    metalThickness: traceMetalThickness,
-    clearance: fromMils(30),
-    maskThickness: traceMaskThickness,
-    name: name,
-    number: number,
-    flags: {}
-  ).addTo(element)
+  let interconnectOffset = (x: fromMils(0), y: nearPin.drillDiameter / 2)
+  #discard Pad(
+  #  pos1: nearPin.centerPos - interconnectOffset,
+  #  pos2: farPin.centerPos + interconnectOffset,
+  #  metalThickness: traceMetalThickness,
+  #  clearance: fromMils(30),
+  #  maskThickness: traceMaskThickness,
+  #  name: name,
+  #  number: number,
+  #  flags: {}
+  #).addTo(element)
 
 dump element
