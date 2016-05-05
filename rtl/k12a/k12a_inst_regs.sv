@@ -5,7 +5,6 @@ module k12a_inst_regs(
     input   logic               cpu_clock,
     input   logic               reset_n,
     
-    input   logic               inst_addr_load,
     input   logic               inst_high_store,
     input   logic               inst_low_store,
     
@@ -20,8 +19,6 @@ module k12a_inst_regs(
     
     assign inst = {inst_high, inst_low};
     
-    assign addr_bus = inst_addr_load ? {8'h80, inst_low} : 16'hzzzz;
-
     `ALWAYS_FF @(posedge cpu_clock or negedge reset_n) begin
         if (~reset_n) begin
             inst_high <= 8'h00;

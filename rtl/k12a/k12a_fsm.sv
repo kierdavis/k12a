@@ -20,7 +20,6 @@ module k12a_fsm(
     output  cd_sel_t            cd_sel,
     output  logic               d_load,
     output  logic               d_store,
-    output  logic               inst_addr_load,
     output  logic               inst_high_store,
     output  logic               inst_low_store,
     output  logic               io_load,
@@ -31,7 +30,9 @@ module k12a_fsm(
     output  logic               pc_load,
     output  logic               pc_store,
     output  skip_sel_t          skip_sel,
-    output  logic               skip_store
+    output  logic               skip_store,
+    output  logic               sp_load,
+    output  logic               sp_store
 );
     
     `ALWAYS_COMB begin
@@ -49,7 +50,6 @@ module k12a_fsm(
         cd_sel = CD_SEL_DATA_BUS;
         d_load = 1'h0;
         d_store = 1'h0;
-        inst_addr_load = 1'h0;
         inst_high_store = 1'h0;
         inst_low_store = 1'h0;
         io_load = 1'h0;
@@ -61,6 +61,8 @@ module k12a_fsm(
         pc_store = 1'h0;
         skip_sel = SKIP_SEL_0;
         skip_store = 1'h0;
+        sp_load = 1'h0;
+        sp_store = 1'h0;
         
         case (state)
             STATE_FETCH1: begin
@@ -184,9 +186,16 @@ module k12a_fsm(
                             a_store = 1'h1;
                         end
                         
-                        4'h2: begin // ld instruction
-                            // addr_bus = cd
-                            cd_load = 1'h1;
+                        4'h2: begin // ld/pop instruction
+                            if (inst[10]) begin // pop instruction
+                                // addr_bus = sp
+                                sp_load = 1'h1;
+                                next_state = STATE_POP; // Additional state deals with incrementing SP
+                            end
+                            else begin // ld instruction
+                                // addr_bus = cd
+                                cd_load = 1'h1;
+                            end
                             // data_bus = M[addr_bus]
                             mem_enable = 1'h1;
                             mem_mode = MEM_MODE_READ;
@@ -195,8 +204,10 @@ module k12a_fsm(
                         end
                         
                         4'h3: begin // ldd instruction
-                            // addr_bus = {8'h80, inst[7:0]}
-                            inst_addr_load = 1'h1;
+                            // addr_bus = sp + inst[10:0]
+                            acu_input1_sel = ACU_INPUT1_SEL_SP;
+                            acu_input2_sel = ACU_INPUT2_SEL_REL_OFFSET;
+                            acu_load = 1'h1;
                             // data_bus = M[addr_bus]
                             mem_enable = 1'h1;
                             mem_mode = MEM_MODE_READ;
@@ -211,9 +222,19 @@ module k12a_fsm(
                             io_store = 1'h1;
                         end
                         
-                        4'h6: begin // st instruction
-                            // addr_bus = cd
-                            cd_load = 1'h1;
+                        4'h6: begin // st/push instruction
+                            if (inst[10]) begin // push instruction
+                                // addr_bus = sp - 1
+                                acu_input1_sel = ACU_INPUT1_SEL_SP;
+                                acu_input2_sel = ACU_INPUT2_SEL_FFFF;
+                                acu_load = 1'h1;
+                                // sp <- addr_bus
+                                sp_store = 1'h1;
+                            end
+                            else begin
+                                // addr_bus = cd
+                                cd_load = 1'h1;
+                            end
                             // data_bus = a
                             a_load = 1'h1;
                             // M[addr_bus] <- data_bus
@@ -222,8 +243,10 @@ module k12a_fsm(
                         end
                         
                         4'h7: begin // std instruction
-                            // addr_bus = {8'h80, inst[7:0]}
-                            inst_addr_load = 1'h1;
+                            // addr_bus = sp + inst[10:0]
+                            acu_input1_sel = ACU_INPUT1_SEL_SP;
+                            acu_input2_sel = ACU_INPUT2_SEL_REL_OFFSET;
+                            acu_load = 1'h1;
                             // data_bus = a
                             a_load = 1'h1;
                             // M[addr_bus] <- data_bus
@@ -264,6 +287,17 @@ module k12a_fsm(
                         end
                     endcase
                 end
+            end
+            
+            STATE_POP: begin
+                // addr_bus = sp + 1
+                acu_input1_sel = ACU_INPUT1_SEL_SP;
+                acu_input2_sel = ACU_INPUT2_SEL_0001;
+                acu_load = 1'h1;
+                // sp <- addr_bus
+                sp_store = 1'h1;
+                
+                next_state = STATE_FETCH1;
             end
             
             STATE_RJMP: begin

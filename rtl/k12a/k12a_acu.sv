@@ -10,6 +10,7 @@ module k12a_acu(
     input   logic [7:0]         d,
     input   logic [15:0]        inst,
     input   logic [15:0]        pc,
+    input   logic [15:0]        sp,
     
     inout   wire [15:0]         addr_bus
 );
@@ -25,6 +26,7 @@ module k12a_acu(
         case (acu_input1_sel)
             ACU_INPUT1_SEL_PC: acu_input1 = pc;
             ACU_INPUT1_SEL_CD: acu_input1 = {c, d};
+            ACU_INPUT1_SEL_SP: acu_input1 = sp;
         endcase
     end
     

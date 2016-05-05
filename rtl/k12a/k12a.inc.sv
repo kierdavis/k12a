@@ -1,9 +1,10 @@
 `ifndef __K12A_INC_SV
 `define __K12A_INC_SV
 
-typedef enum logic {
+typedef enum logic [1:0] {
     ACU_INPUT1_SEL_PC,
-    ACU_INPUT1_SEL_CD
+    ACU_INPUT1_SEL_CD,
+    ACU_INPUT1_SEL_SP
 } acu_input1_sel_t;
 
 typedef enum logic [1:0] {
@@ -49,6 +50,7 @@ typedef enum logic [2:0] {
     STATE_FETCH2,
     STATE_FETCH3,
     STATE_EXEC,
+    STATE_POP,
     STATE_RJMP,
     STATE_HALT
 } state_t;

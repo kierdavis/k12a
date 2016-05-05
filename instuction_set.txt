@@ -1,11 +1,13 @@
 0000 0 --- ---- ----    inc     CD <- CD + 1
 0001 0 --- ---- -iii    in      A <- IO[i]
-0010 0 --- ---- ----    ld      A <- [CD]
-0011 0 --- iiii iiii    ldd     A <- [i]
+0010 0 0-- ---- ----    ld      A <- [CD]
+0010 0 1-- ---- ----    pop     A <- [SP]; SP <- SP + 1
+0011 0 iii iiii iiii    ldd     A <- [SP + i]
 0100 0 --- ---- ----    dec     CD <- CD - 1
 0101 0 --- ---- -iii    out     IO[i] <- A
-0110 0 --- ---- ----    st      [CD] <- A
-0111 0 --- iiii iiii    std     [i] <- A
+0110 0 0-- ---- ----    st      [CD] <- A
+0110 0 1-- ---- ----    push    SP <- SP - 1; [SP] <- A
+0111 0 iii iiii iiii    std     [SP + i] <- A
 
 1000 0 fff ---- ----    sk      conditional skip: compute A - B, skip if flag f
 1001 0 fff iiii iiii    ski     conditional skip: compute A - i, skip if flag f

@@ -51,7 +51,6 @@ module k12a(
     logic               d_load;
     logic               d_store;
     logic [15:0]        inst;
-    logic               inst_addr_load;
     logic               inst_high_store;
     logic               inst_low_store;
     logic               io_load;
@@ -65,6 +64,9 @@ module k12a(
     logic               skip;
     skip_sel_t          skip_sel;
     logic               skip_store;
+    logic [15:0]        sp;
+    logic               sp_load;
+    logic               sp_store;
     state_t             state;
 
     assign halted = state == STATE_HALT;
@@ -94,7 +96,6 @@ module k12a(
         .cd_sel(cd_sel),
         .d_load(d_load),
         .d_store(d_store),
-        .inst_addr_load(inst_addr_load),
         .inst_high_store(inst_high_store),
         .inst_low_store(inst_low_store),
         .io_load(io_load),
@@ -105,7 +106,9 @@ module k12a(
         .pc_load(pc_load),
         .pc_store(pc_store),
         .skip_sel(skip_sel),
-        .skip_store(skip_store)
+        .skip_store(skip_store),
+        .sp_load(sp_load),
+        .sp_store(sp_store)
     );
     
     k12a_acu acu(
@@ -116,6 +119,7 @@ module k12a(
         .d(d),
         .inst(inst),
         .pc(pc),
+        .sp(sp),
         .addr_bus(addr_bus)
     );
     
@@ -154,10 +158,18 @@ module k12a(
         .pc(pc)
     );
     
+    k12a_sp_reg sp_reg(
+        .cpu_clock(cpu_clock),
+        .reset_n(reset_n),
+        .sp_load(sp_load),
+        .sp_store(sp_store),
+        .addr_bus(addr_bus),
+        .sp(sp)
+    );
+    
     k12a_inst_regs inst_regs(
         .cpu_clock(cpu_clock),
         .reset_n(reset_n),
-        .inst_addr_load(inst_addr_load),
         .inst_high_store(inst_high_store),
         .inst_low_store(inst_low_store),
         .addr_bus(addr_bus),
