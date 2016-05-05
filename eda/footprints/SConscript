@@ -1,0 +1,11 @@
+Import("env")
+env = env.Clone()
+env.Append(
+    NIMCFLAGS = ["--define:release"],
+)
+
+for nim_file in env.Glob("*.nim"):
+    executable = env.Nim(nim_file)
+    footprint = env.GenerateFootprint(executable)
+    env.RenderFootprintEPS(footprint)
+    Clean(executable, "nimcache")
