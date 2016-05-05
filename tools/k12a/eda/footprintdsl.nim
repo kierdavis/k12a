@@ -94,6 +94,24 @@ proc `/`*(a: Dimension, b: int): Dimension =
 proc `-`*(a: Dimension): Dimension =
   Dimension(-int(a))
 
+proc `+`*(a, b: Vector): Vector =
+  (x: a.x + b.x, y: a.y + b.y)
+
+proc `-`*(a, b: Vector): Vector =
+  (x: a.x - b.x, y: a.y - b.y)
+
+proc `*`*(a: Vector, b: int): Vector =
+  (x: a.x * b, y: a.y * b)
+
+proc `*`*(a: int, b: Vector): Vector =
+  (x: a * b.x, y: a * b.y)
+
+proc `/`*(a: Vector, b: int): Vector =
+  (x: a.x / b, y: a.y / b)
+
+proc `-`*(a: Vector): Vector =
+  (x: -a.x, y: -a.y)
+
 proc fromMils*(x: float): Dimension =
   Dimension(x * 100.0)
 
@@ -112,20 +130,25 @@ proc fromMils*(x, y: float): Vector =
 proc fromMM*(x, y: float): Vector =
   (x: x.fromMM(), y: y.fromMM())
 
-proc add*(elem: var Element, item: ElementItem) =
+proc addTo*(item: ElementItem, elem: var Element): ElementItem =
   elem.children.add item
+  result = item
 
-proc add*(elem: var Element, pad: Pad) =
+proc addTo*(pad: Pad, elem: var Element): Pad =
   elem.children.add ElementItem(kind: elementItemPad, pad: pad)
+  result = pad
 
-proc add*(elem: var Element, pin: Pin) =
+proc addTo*(pin: Pin, elem: var Element): Pin =
   elem.children.add ElementItem(kind: elementItemPin, pin: pin)
+  result = pin
 
-proc add*(elem: var Element, line: Line) =
+proc addTo*(line: Line, elem: var Element): Line =
   elem.children.add ElementItem(kind: elementItemLine, line: line)
+  result = line
 
-proc add*(elem: var Element, arc: Arc) =
+proc addTo*(arc: Arc, elem: var Element): Arc =
   elem.children.add ElementItem(kind: elementItemArc, arc: arc)
+  result = arc
 
 proc quote(s: Rope): Rope =
   rope("\"") & s & rope("\"")

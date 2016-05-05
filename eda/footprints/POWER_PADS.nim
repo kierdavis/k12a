@@ -13,7 +13,7 @@ var element = Element(
   children: @[],
 )
 
-element.add Pin(
+discard Pin(
   centerPos: (x: -pinOffset, y: fromMils(0)),
   metalDiameter: fromMM(1.2),
   clearance: fromMils(30),
@@ -22,9 +22,9 @@ element.add Pin(
   name: "VCC",
   number: "1",
   flags: {},
-)
+).addTo(element)
 
-element.add Pin(
+discard Pin(
   centerPos: (x: pinOffset, y: fromMils(0)),
   metalDiameter: fromMM(1.2),
   clearance: fromMils(30),
@@ -33,24 +33,24 @@ element.add Pin(
   name: "GND",
   number: "2",
   flags: {},
-)
+).addTo(element)
 
-element.add Line(
+discard Line(
   pos1: (x: pinOffset - fromMils(20), y: -pinOffset),
   pos2: (x: pinOffset + fromMils(20), y: -pinOffset),
   thickness: fromMM(0.2),
-)
+).addTo(element)
 
-element.add Line(
+discard Line(
   pos1: (x: -pinOffset - fromMils(20), y: -pinOffset),
   pos2: (x: -pinOffset + fromMils(20), y: -pinOffset),
   thickness: fromMM(0.2),
-)
+).addTo(element)
 
-element.add Line(
+discard Line(
   pos1: (x: -pinOffset, y: -pinOffset - fromMils(20)),
   pos2: (x: -pinOffset, y: -pinOffset + fromMils(20)),
   thickness: fromMM(0.2),
-)
+).addTo(element)
 
 dump element
