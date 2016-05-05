@@ -1,0 +1,3 @@
+(component-library "./symbols" "K12A symbols")
+(component-library "./mboard" "K12A MBoard subcircuits")
+(source-library "./mboard")
