@@ -4,7 +4,7 @@ var element = Element(
   flags: {},
   description: "Two rows of 8 breakout pads",
   markPosition: fromMils(400, 100),
-  namePosition: fromMils(-350, -60),
+  namePosition: fromMils(-350, -160),
   nameRotation: 0,
   nameScale: 100,
   nameFlags: {},
