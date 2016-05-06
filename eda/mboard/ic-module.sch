@@ -6,7 +6,7 @@ device=CONNECTOR_16
 T 43200 49100 5 10 0 0 0 0 1
 footprint=DIP16
 T 43200 48700 5 10 1 1 0 0 1
-refdes=U1
+refdes=CONN3
 }
 C 40700 50000 1 0 0 breakout-pads-1.sym
 {
@@ -53,7 +53,7 @@ C 44700 48700 1 90 0 capacitor-1.sym
 T 44000 48900 5 10 0 0 90 0 1
 device=CAPACITOR
 T 44800 49200 5 10 1 1 0 0 1
-refdes=C?
+refdes=C1
 T 43800 48900 5 10 0 0 90 0 1
 symversion=0.1
 T 44800 49000 5 10 1 1 0 0 1
