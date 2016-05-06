@@ -4,8 +4,14 @@ env.Append(
     NIMCFLAGS = ["--define:release"],
 )
 
+footprints = []
+
 for nim_file in env.Glob("*.nim"):
     executable = env.Nim(nim_file)
     footprint = env.GenerateFootprint(executable)
     env.RenderFootprintEPS(footprint)
     Clean(executable, "nimcache")
+
+    footprints.append(footprint)
+
+Export("footprints")

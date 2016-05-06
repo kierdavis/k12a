@@ -1,0 +1,8 @@
+Import("env footprints")
+env = env.Clone()
+env.Append(
+    
+)
+
+pcb_targets = env.Gsch2pcb("mboard.sch")
+Depends(pcb_targets, footprints)
