@@ -4,5 +4,9 @@ env.Append(
     
 )
 
+symbols = Glob("#eda/symbols/*.sym")
+
 pcb_targets = env.Gsch2pcb("mboard.sch")
-Depends(pcb_targets, footprints)
+Depends(pcb_targets, footprints) # Also depends on custom footprints
+Depends(pcb_targets, symbols) # Also depends on custom symbols
+Depends(pcb_targets, ["ic-module.sch", "ic-module.sym"]) # Also depends on submodules
