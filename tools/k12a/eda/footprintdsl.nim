@@ -295,7 +295,7 @@ proc serialize*(elem: Element): Rope =
   ]
   for child in elem.children:
     result = &[result, rope("    "), child.serialize(), rope("\n")]
-  result = result & rope(")")
+  result = result & rope(")\n")
 
 proc getOutputFile(): string =
   for kind, key, val in getopt():
