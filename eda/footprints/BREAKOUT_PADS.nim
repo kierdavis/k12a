@@ -20,7 +20,7 @@ let traceMaskThickness = traceMetalThickness + 2*fromMM(0.1)
 
 for i in 0..7:
   let x = fromMils((float(i) - 3.5) * 100)
-  let number = $i
+  let number = $(i + 1)
   let name = "pin" & number
   let nearPin = Pin(
     centerPos: (x: x, y: fromMils(50)),
