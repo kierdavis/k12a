@@ -17,7 +17,7 @@ env.Append(
     GSCH2PCBFLAGS = ["--elements-dir", Dir("#eda/footprints").abspath],
     BUILDERS = {
         "IVerilog": Builder(action = "$IVERILOG $IVERILOGFLAGS -o$TARGET $SOURCES", suffix = ".vvp"),
-        "Nim": Builder(action = "$NIM $NIMFLAGS compile --out:${TARGET.file} $NIMCFLAGS ${SOURCES.file}", suffix = ".generate", chdir = True),
+        "Nim": Builder(action = "$NIM $NIMFLAGS compile --out:${TARGET.file} $NIMCFLAGS ${SOURCES.file}", chdir = True),
         "GenerateFootprint": Builder(action = "$SOURCE $TARGET", suffix = ".fp"),
         "RenderFootprintEPS": Builder(action = "$PCB -x eps --eps-file $TARGET $SOURCE", suffix = ".eps"),
         "Gsch2pcb": Builder(action = "$GSCH2PCB $GSCH2PCBFLAGS $SOURCE", emitter = gsch2pcb_emitter),

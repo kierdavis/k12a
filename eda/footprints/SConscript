@@ -1,3 +1,5 @@
+import os.path
+
 Import("env")
 env = env.Clone()
 env.Append(
@@ -7,7 +9,8 @@ env.Append(
 footprints = []
 
 for nim_file in env.Glob("*.nim"):
-    executable = env.Nim(nim_file)
+    executable_fn = os.path.splitext(str(nim_file))[0] + ".generate"
+    executable = env.Nim(executable_fn, nim_file)
     footprint = env.GenerateFootprint(executable)
     env.RenderFootprintEPS(footprint)
     Clean(executable, "nimcache")
