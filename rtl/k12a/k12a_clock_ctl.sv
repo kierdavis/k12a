@@ -17,6 +17,6 @@ module k12a_clock_ctl(
         end
     end
     
-    assign async_write = sys_clock & ~cpu_clock;
+    assign async_write = reset_n & sys_clock & ~cpu_clock;
 
 endmodule
