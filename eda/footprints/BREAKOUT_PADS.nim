@@ -15,14 +15,11 @@ let pinDrillDiameter = fromMM(0.8) # 22AWG hook-up wire is just over 0.6mm diame
 let pinMetalDiameter = pinDrillDiameter + 2*fromMM(0.2)
 let pinMaskDiameter = pinMetalDiameter + 2*fromMM(0.1)
 
-let traceMetalThickness = fromMils(15)
-let traceMaskThickness = traceMetalThickness + 2*fromMM(0.1)
-
 for i in 0..7:
   let x = fromMils((float(i) - 3.5) * 100)
   let number = $(i + 1)
   let name = "pin" & number
-  let nearPin = Pin(
+  discard Pin(
     centerPos: (x: x, y: fromMils(50)),
     metalDiameter: pinMetalDiameter,
     clearance: fromMils(30),
@@ -32,7 +29,7 @@ for i in 0..7:
     number: number,
     flags: {},
   ).addTo(element)
-  let farPin = Pin(
+  discard Pin(
     centerPos: (x: x, y: fromMils(-50)),
     metalDiameter: pinMetalDiameter,
     clearance: fromMils(30),
@@ -42,16 +39,5 @@ for i in 0..7:
     number: number,
     flags: {},
   ).addTo(element)
-  let interconnectOffset = (x: fromMils(0), y: nearPin.drillDiameter / 2)
-  #discard Pad(
-  #  pos1: nearPin.centerPos - interconnectOffset,
-  #  pos2: farPin.centerPos + interconnectOffset,
-  #  metalThickness: traceMetalThickness,
-  #  clearance: fromMils(30),
-  #  maskThickness: traceMaskThickness,
-  #  name: name,
-  #  number: number,
-  #  flags: {}
-  #).addTo(element)
 
 dump element
