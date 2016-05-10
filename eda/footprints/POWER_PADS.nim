@@ -2,6 +2,10 @@ import k12a.eda.footprintdsl
 
 let pinOffset = fromMils(75)
 
+let pinDrillDiameter = fromMM(0.8) # 22AWG hook-up wire is just over 0.6mm diameter
+let pinMetalDiameter = pinDrillDiameter + 2*fromMils(16)
+let pinMaskDiameter = pinMetalDiameter + 2*fromMils(3)
+
 var element = Element(
   flags: {},
   description: "Power connector pads",
@@ -15,10 +19,10 @@ var element = Element(
 
 discard Pin(
   centerPos: (x: -pinOffset, y: fromMils(0)),
-  metalDiameter: fromMM(1.2),
+  metalDiameter: pinMetalDiameter,
   clearance: fromMils(30),
-  maskDiameter: fromMM(1.4),
-  drillDiameter: fromMM(0.8),
+  maskDiameter: pinMaskDiameter,
+  drillDiameter: pinDrillDiameter,
   name: "VCC",
   number: "1",
   flags: {},
@@ -26,10 +30,10 @@ discard Pin(
 
 discard Pin(
   centerPos: (x: pinOffset, y: fromMils(0)),
-  metalDiameter: fromMM(1.2),
+  metalDiameter: pinMetalDiameter,
   clearance: fromMils(30),
-  maskDiameter: fromMM(1.4),
-  drillDiameter: fromMM(0.8),
+  maskDiameter: pinMaskDiameter,
+  drillDiameter: pinDrillDiameter,
   name: "GND",
   number: "2",
   flags: {},

@@ -12,8 +12,8 @@ var element = Element(
 )
 
 let pinDrillDiameter = fromMM(0.8) # 22AWG hook-up wire is just over 0.6mm diameter
-let pinMetalDiameter = pinDrillDiameter + 2*fromMM(0.2)
-let pinMaskDiameter = pinMetalDiameter + 2*fromMM(0.1)
+let pinMetalDiameter = pinDrillDiameter + 2*fromMils(16)
+let pinMaskDiameter = pinMetalDiameter + 2*fromMils(3)
 
 for i in 0..7:
   let x = fromMils((float(i) - 3.5) * 100)
