@@ -14,6 +14,29 @@ const height = 10.cm()
 pcb.width = width
 pcb.height = height
 
+# Set up layers
+pcb.groups = "1,c:6,s:7:8"
+pcb.layers = @[
+  initLayer(),
+  initLayer(),
+  initLayer(),
+  initLayer(),
+  initLayer(),
+  initLayer(),
+]
+pcb.layers[0].number = 1
+pcb.layers[0].name = "top"
+pcb.layers[1].number = 6
+pcb.layers[1].name = "bottom"
+pcb.layers[2].number = 7
+pcb.layers[2].name = "outline"
+pcb.layers[3].number = 8
+pcb.layers[3].name = "spare"
+pcb.layers[4].number = 9
+pcb.layers[4].name = "silk"
+pcb.layers[5].number = 10
+pcb.layers[5].name = "silk"
+
 # Move DIP16 items into position
 const midX = width / 2
 const midY = height / 2
