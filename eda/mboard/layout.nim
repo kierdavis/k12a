@@ -19,7 +19,7 @@ const midX = width / 2
 const midY = height / 2
 const dipWidth = 700.mil()
 const dipHeight = 300.mil()
-const dipHozSeparation = 200.mil()
+const dipHozSeparation = 150.mil()
 const dipVertSeparation = 600.mil()
 const dipAnchorsX = [
   midX - dipHozSeparation/2 - dipWidth - dipHozSeparation - dipWidth,
@@ -56,6 +56,19 @@ for i in 0 .. 15:
   pcb.mfindElement(elementName).markPos = (
     x: dipAnchorsX[i mod 4] + dipWidth/2,
     y: dipAnchorsY[i div 4] + 150.mil(),
+  )
+
+# Move decoupling capacitors into position
+const dcapAnchorsX = [
+  dipAnchorsX[0] - 200.mil(),
+  dipAnchorsX[3] + dipWidth + 200.mil(),
+]
+for i in 0 .. 7:
+  let elementName = "C" & $(i + 1)
+  pcb.mfindElement(elementName).rotateCW()
+  pcb.mfindElement(elementName).markPos = (
+    x: dcapAnchorsX[i div 4],
+    y: dipAnchorsY[i mod 4] - 200.mil(),
   )
 
 echo $pcb
