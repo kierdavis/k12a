@@ -14,7 +14,7 @@ env.Append(
     NIMCFLAGS = ["--verbosity:0", "--path:%s" % Dir("#tools").abspath],
     PCB = "pcb",
     GSCH2PCB = "gsch2pcb",
-    GSCH2PCBFLAGS = ["--elements-dir", Dir("#eda/footprints").abspath],
+    GSCH2PCBFLAGS = ["--quiet", "--elements-dir", Dir("#eda/footprints").abspath],
     BUILDERS = {
         "IVerilog": Builder(action = "$IVERILOG $IVERILOGFLAGS -o$TARGET $SOURCES", suffix = ".vvp"),
         "Nim": Builder(action = "$NIM $NIMFLAGS compile --out:${TARGET.file} $NIMCFLAGS ${SOURCES.file}", chdir = True),
