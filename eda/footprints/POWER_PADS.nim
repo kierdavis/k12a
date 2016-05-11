@@ -42,19 +42,19 @@ discard Pin(
 discard Line(
   pos1: (x: pinOffset - fromMils(20), y: -pinOffset),
   pos2: (x: pinOffset + fromMils(20), y: -pinOffset),
-  thickness: fromMil(10),
+  thickness: fromMils(10),
 ).addTo(element)
 
 discard Line(
   pos1: (x: -pinOffset - fromMils(20), y: -pinOffset),
   pos2: (x: -pinOffset + fromMils(20), y: -pinOffset),
-  thickness: fromMil(10),
+  thickness: fromMils(10),
 ).addTo(element)
 
 discard Line(
   pos1: (x: -pinOffset, y: -pinOffset - fromMils(20)),
   pos2: (x: -pinOffset, y: -pinOffset + fromMils(20)),
-  thickness: fromMil(10),
+  thickness: fromMils(10),
 ).addTo(element)
 
 dump element
