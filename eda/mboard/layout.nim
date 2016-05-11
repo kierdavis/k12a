@@ -71,4 +71,21 @@ for i in 0 .. 7:
     y: dipAnchorsY[i mod 4] - 200.mil(),
   )
 
+# Move power LED assembly into position
+const powerLedAnodeAnchor = (
+  x: dipAnchorsX[3] - dipHozSeparation/2 - 50.mil(),
+  y: height - 125.mil(),
+)
+pcb.mfindElement("LED1").markPos = powerLedAnodeAnchor
+pcb.mfindElement("R1").markPos = powerLedAnodeAnchor - (x: 500.mil(), y: 0.mil())
+
+# Move power connectors into position
+pcb.mfindElement("CONN1").markPos = (x: midX, y: 100.mil())
+pcb.mfindElement("CONN2").rotateCCW()
+pcb.mfindElement("CONN2").markPos = (x: 100.mil(), y: midY)
+pcb.mfindElement("CONN3").rotate180()
+pcb.mfindElement("CONN3").markPos = (x: midX, y: height - 100.mil())
+pcb.mfindElement("CONN4").rotateCW()
+pcb.mfindElement("CONN4").markPos = (x: width - 100.mil(), y: midY)
+
 echo $pcb
