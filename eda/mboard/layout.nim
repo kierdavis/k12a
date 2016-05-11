@@ -14,6 +14,9 @@ const height = 10.cm()
 pcb.width = width
 pcb.height = height
 
+# Set grid size
+pcb.grid.step = 25.mil().float()
+
 # Set up layers
 pcb.groups = "1,c:6,s:7:8"
 pcb.layers = @[
