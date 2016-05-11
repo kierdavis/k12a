@@ -88,4 +88,27 @@ pcb.mfindElement("CONN3").markPos = (x: midX, y: height - 100.mil())
 pcb.mfindElement("CONN4").rotateCW()
 pcb.mfindElement("CONN4").markPos = (x: width - 100.mil(), y: midY)
 
+proc drawTrack(point1, point2: Vector) =
+  pcb.mfindLayer("bottom").lines.add((
+    point1: point1,
+    point2: point2,
+    thickness: 16.mil(),
+    clearance: 30.mil(),
+    flags: {},
+  ))
+
+# Draw tracks connecting the DIP sockets to the breakout pins
+for i in 0 .. 15:
+  for j in 0 .. 7:
+    let x = dipAnchorsX[i mod 4] + j * 100.mil()
+    let yBottom = dipAnchorsY[i div 4]
+    let yTop = yBottom - dipHeight
+    if j != 0:
+      drawTrack((x: x, y: yTop), (x: x, y: yTop - 200.mil()))
+    if j != 7:
+      drawTrack((x: x, y: yBottom), (x: x, y: yBottom + 200.mil()))
+
+# Draw a track connecting the power LED with its resistor
+drawTrack(powerLedAnodeAnchor, powerLedAnodeAnchor - (x: 100.mil(), y: 0.mil()))
+
 echo $pcb
