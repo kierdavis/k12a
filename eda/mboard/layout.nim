@@ -114,13 +114,33 @@ pcb.mfindElement("CONN3").markPos = (x: midX, y: height - 100.mil())
 pcb.mfindElement("CONN4").rotateCW()
 pcb.mfindElement("CONN4").markPos = (x: width - 100.mil(), y: midY)
 
+# Set up ground and power planes
+pcb.mfindLayer("bottom").polygons.add((
+  flags: {ofClearPoly},
+  vertices: @[
+    (x: Dimension(0), y: Dimension(0)),
+    (x: width, y: Dimension(0)),
+    (x: width, y: height),
+    (x: Dimension(0), y: height),
+  ],
+))
+pcb.mfindLayer("top").polygons.add((
+  flags: {ofClearPoly},
+  vertices: @[
+    (x: Dimension(0), y: Dimension(0)),
+    (x: width, y: Dimension(0)),
+    (x: width, y: height),
+    (x: Dimension(0), y: height),
+  ],
+))
+
 proc drawTrack(point1, point2: Vector) =
   pcb.mfindLayer("bottom").lines.add((
     point1: point1,
     point2: point2,
     thickness: 16.mil(),
     clearance: 30.mil(),
-    flags: {},
+    flags: {ofClearLine},
   ))
 
 # Draw tracks connecting the DIP sockets to the breakout pins
