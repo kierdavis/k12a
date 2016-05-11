@@ -34,5 +34,6 @@ layout_pcb = env.File("mboard.layout.pcb")
 layout_executable = env.Nim("layout", "layout.nim")[0]
 Clean(layout_executable, "nimcache")
 layout_pcb = env.Command(layout_pcb, preprocessed_pcb, "%s < $SOURCE > $TARGET" % layout_executable.abspath)
+Depends(layout_pcb, layout_executable)
 
 env.PCBRenderEPS(layout_pcb)
