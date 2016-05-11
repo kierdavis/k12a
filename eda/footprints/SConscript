@@ -9,10 +9,10 @@ env.Append(
 footprints = []
 
 for nim_file in env.Glob("*.nim"):
-    executable_fn = os.path.splitext(str(nim_file))[0] + ".generate"
-    executable = env.Nim(executable_fn, nim_file)
-    footprint = env.GenerateFootprint(executable)
-    env.RenderFootprintEPS(footprint)
+    base = os.path.splitext(str(nim_file))[0]
+    executable = env.Nim(base + ".generate", nim_file)
+    footprint = env.Command(base + ".fp", executable, "$SOURCE $TARGET")
+    env.PCBRenderEPS(footprint)
     Clean(executable, "nimcache")
 
     footprints.append(footprint)

@@ -1,4 +1,6 @@
+nimcache
 *.cmd
 *.net
 *.pcb
 *.pcb-
+*.eps

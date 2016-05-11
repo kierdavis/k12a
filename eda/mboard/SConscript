@@ -1,3 +1,5 @@
+import os
+
 Import("env footprints")
 env = env.Clone()
 env.Append(
@@ -6,7 +8,31 @@ env.Append(
 
 symbols = Glob("#eda/symbols/*.sym")
 
+# Create PCB, netlist and command file from schematic
 pcb_targets = env.Gsch2pcb("mboard.sch")
 Depends(pcb_targets, footprints) # Also depends on custom footprints
 Depends(pcb_targets, symbols) # Also depends on custom symbols
 Depends(pcb_targets, ["ic-module.sch", "ic-module.sym"]) # Also depends on submodules
+[pcb, netlist, pin_script] = list(pcb_targets)
+
+# Define and execute the preprocessing script
+preprocessed_pcb = env.File("mboard.preprocessed.pcb")
+def create_preprocess_script(target, source, env):
+    with open(str(target[0]), "w") as f:
+        #print >> f, "LoadFrom(Layout,%s)" % pcb.abspath
+        print >> f, "LoadFrom(Netlist,%s)" % netlist.abspath
+        print >> f, "ExecuteFile(%s)" % pin_script.abspath
+        print >> f, "SaveTo(LayoutAs,%s)" % preprocessed_pcb.abspath
+        print >> f, "Quit()"
+preprocess_script = env.Command("preprocess.cmd", None, create_preprocess_script)
+preprocess_script_result = env.Command(None, preprocess_script, "pcb --action-script $SOURCE %s" % pcb.abspath, ENV = os.environ)
+Depends(preprocess_script_result, pcb_targets)
+Depends(preprocessed_pcb, preprocess_script_result)
+
+# Compile and execute the layout script
+layout_pcb = env.File("mboard.layout.pcb")
+layout_executable = env.Nim("layout", "layout.nim")[0]
+Clean(layout_executable, "nimcache")
+layout_pcb = env.Command(layout_pcb, preprocessed_pcb, "%s < $SOURCE > $TARGET" % layout_executable.abspath)
+
+env.PCBRenderEPS(layout_pcb)
