@@ -30,6 +30,8 @@ pcb.layers[6].name = "outline"
 pcb.layers[7].name = "spare"
 pcb.layers[8].name = "silk"
 pcb.layers[9].name = "silk"
+const topLayer = 1
+const bottomLayer = 6
 
 # Move DIP16 items into position
 const midX = width / 2
@@ -147,5 +149,43 @@ for i in 0 .. 15:
 
 # Draw a track connecting the power LED with its resistor
 drawTrack(powerLedAnodeAnchor, powerLedAnodeAnchor - (x: 100.mil(), y: 0.mil()))
+
+# Add thermals to DIP16s and breakout pins
+for i in 1 .. 16:
+  for pin in pcb.mfindElement("U" & $i & "/CONN3").pins.mitems():
+    if pin.number == "8":
+      pin.thermals.add(bottomLayer)
+    if pin.number == "16":
+      pin.thermals.add(topLayer)
+  for pin in pcb.mfindElement("U" & $i & "/CONN2").pins.mitems():
+    if pin.number == "1":
+      pin.thermals.add(bottomLayer)
+  for pin in pcb.mfindElement("U" & $i & "/CONN1").pins.mitems():
+    if pin.number == "1":
+      pin.thermals.add(topLayer)
+
+# Add thermals to decoupling caps
+for i in 1 .. 8:
+  for pin in pcb.mfindElement("C" & $i).pins.mitems():
+    if pin.number == "1":
+      pin.thermals.add(topLayer)
+    if pin.number == "2":
+      pin.thermals.add(bottomLayer)
+
+# Add thermals to power connectors
+for i in 1 .. 4:
+  for pin in pcb.mfindElement("CONN" & $i).pins.mitems():
+    if pin.number == "1":
+      pin.thermals.add(topLayer)
+    if pin.number == "2":
+      pin.thermals.add(bottomLayer)
+
+# Add thermals to power LED assembly
+for pin in pcb.mfindElement("R1").pins.mitems():
+  if pin.number == "1":
+    pin.thermals.add(topLayer)
+for pin in pcb.mfindElement("LED1").pins.mitems():
+  if pin.number == "2":
+    pin.thermals.add(bottomLayer)
 
 echo $pcb
