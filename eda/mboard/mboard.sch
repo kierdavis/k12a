@@ -100,7 +100,7 @@ refdes=LED1
 T 54100 48400 5 10 0 0 270 0 1
 symversion=0.1
 T 53300 49200 5 10 0 0 0 0 1
-footprint=0603
+footprint=RCY100
 }
 C 53400 47900 1 0 0 gnd-1.sym
 N 53500 50300 53500 50200 4
