@@ -54,6 +54,7 @@ const dipAnchorsY = [
 ]
 for i in 0 .. 15:
   let elementName = "U" & $(i + 1) & "/CONN3"
+  pcb.mfindElement(elementName).flags.incl(ofHideName)
   pcb.mfindElement(elementName).rotateCCW()
   pcb.mfindElement(elementName).markPos = (
     x: dipAnchorsX[i mod 4],
@@ -63,6 +64,7 @@ for i in 0 .. 15:
 # Move upper breakout pins into position
 for i in 0 .. 15:
   let elementName = "U" & $(i + 1) & "/CONN1"
+  pcb.mfindElement(elementName).flags.incl(ofHideName)
   pcb.mfindElement(elementName).markPos = (
     x: dipAnchorsX[i mod 4] + dipWidth/2,
     y: dipAnchorsY[i div 4] - dipHeight - 150.mil(),
@@ -71,6 +73,7 @@ for i in 0 .. 15:
 # Move lower breakout pins into position
 for i in 0 .. 15:
   let elementName = "U" & $(i + 1) & "/CONN2"
+  pcb.mfindElement(elementName).flags.incl(ofHideName)
   pcb.mfindElement(elementName).rotate180()
   pcb.mfindElement(elementName).markPos = (
     x: dipAnchorsX[i mod 4] + dipWidth/2,
@@ -84,6 +87,7 @@ const dcapAnchorsX = [
 ]
 for i in 0 .. 7:
   let elementName = "C" & $(i + 1)
+  pcb.mfindElement(elementName).textPos.x -= 50.mil()
   pcb.mfindElement(elementName).rotateCW()
   pcb.mfindElement(elementName).markPos = (
     x: dcapAnchorsX[i div 4],
@@ -95,6 +99,8 @@ const powerLedAnodeAnchor = (
   x: dipAnchorsX[3] - dipHozSeparation/2 - 50.mil(),
   y: height - 125.mil(),
 )
+pcb.mfindElement("LED1").textPos.x += 200.mil()
+pcb.mfindElement("R1").textPos.y -= 50.mil()
 pcb.mfindElement("LED1").markPos = powerLedAnodeAnchor
 pcb.mfindElement("R1").markPos = powerLedAnodeAnchor - (x: 500.mil(), y: 0.mil())
 
