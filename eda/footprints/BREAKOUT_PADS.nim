@@ -11,7 +11,7 @@ var element = Element(
   children: @[],
 )
 
-let pinDrillDiameter = fromMM(0.8) # 22AWG hook-up wire is just over 0.6mm diameter
+let pinDrillDiameter = fromMils(28) # 22AWG hook-up wire is just over 0.6mm diameter
 let pinMetalDiameter = pinDrillDiameter + 2*fromMils(16)
 let pinMaskDiameter = pinMetalDiameter + 2*fromMils(3)
 
