@@ -11,7 +11,7 @@ footprints = []
 for nim_file in env.Glob("*.nim"):
     base = os.path.splitext(str(nim_file))[0]
     executable = env.Nim(base + ".generate", nim_file)
-    footprint = env.Command(base + ".fp", executable, "$SOURCE $TARGET")
+    footprint = env.Command(base + ".fp", executable, "$SOURCE > $TARGET")
     env.PCBRenderEPS(footprint)
     Clean(executable, "nimcache")
 
