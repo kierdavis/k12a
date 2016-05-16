@@ -114,22 +114,23 @@ pcb.mfindElement("CONN4").rotateCW()
 pcb.mfindElement("CONN4").markPos = (x: width - 100.mil(), y: midY)
 
 # Set up ground and power planes
+let planeMargin = 50.mil()
 pcb.mfindLayer("bottom").polygons.add((
   flags: {ofClearPoly},
   vertices: @[
-    (x: Dimension(0), y: Dimension(0)),
-    (x: width, y: Dimension(0)),
-    (x: width, y: height),
-    (x: Dimension(0), y: height),
+    (x: planeMargin, y: planeMargin),
+    (x: width-planeMargin, y: planeMargin),
+    (x: width-planeMargin, y: height-planeMargin),
+    (x: planeMargin, y: height-planeMargin),
   ],
 ))
 pcb.mfindLayer("top").polygons.add((
   flags: {ofClearPoly},
   vertices: @[
-    (x: Dimension(0), y: Dimension(0)),
-    (x: width, y: Dimension(0)),
-    (x: width, y: height),
-    (x: Dimension(0), y: height),
+    (x: planeMargin, y: planeMargin),
+    (x: width-planeMargin, y: planeMargin),
+    (x: width-planeMargin, y: height-planeMargin),
+    (x: planeMargin, y: height-planeMargin),
   ],
 ))
 
