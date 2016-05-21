@@ -2,7 +2,7 @@ Read:
     0: switches
     1: buttons
     2: leds
-    3: stack
+    3: 
     4: control signals
     5: 
     6: spi 0 data reg
@@ -12,7 +12,7 @@ Write:
     0: seven seg 0 (lower digit)
     1: seven seg 1 (upper digit)
     2: leds
-    3: stack
+    3: 
     4: control signals
     5: lcd data reg
     6: spi 0 data reg
