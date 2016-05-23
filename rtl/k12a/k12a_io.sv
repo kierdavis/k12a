@@ -12,8 +12,11 @@ module k12a_io(
     
     inout   wire [7:0]          data_bus,
     
-    input   logic [7:0]         switches,
-    input   logic [7:0]         buttons,
+    input   logic [7:0]         switches_phy,
+    input   logic [7:0]         switches_ext,
+    input   logic               sel_switches,
+    input   logic [7:0]         buttons_phy,
+    input   logic [7:0]         buttons_ext,
     output  logic [7:0]         leds,
     output  logic [7:0]         sevenseg0, // dot, a, b, c, d, e, f, g
     output  logic [7:0]         sevenseg1,
@@ -29,6 +32,8 @@ module k12a_io(
     input   logic               spi1_miso
 );
 
+    logic [7:0] switches;
+    logic [7:0] buttons;
     logic [7:0] sevenseg0_buffer;
     logic [7:0] sevenseg1_buffer;
     logic [6:0] sevenseg0_decoded;
@@ -48,6 +53,9 @@ module k12a_io(
     logic spi1_data_io_store;
     logic spi1_begin;
     logic spi1_busy;
+    
+    assign switches = sel_switches ? switches_ext : switches_phy;
+    assign buttons = buttons_phy | buttons_ext;
     
     assign sevenseg0 = sevenseg0_mode ? {1'h0, sevenseg0_decoded} : sevenseg0_buffer;
     assign sevenseg1 = sevenseg1_mode ? {1'h0, sevenseg1_decoded} : sevenseg1_buffer;
