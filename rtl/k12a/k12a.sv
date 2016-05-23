@@ -2,8 +2,9 @@
 `include "k12a.inc.sv"
 
 module k12a(
-    input   logic               sys_clock,
+    input   logic               cpu_clock,
     input   logic               reset_n,
+    input   logic               async_write,
     
     output  logic               halted,
     
@@ -41,7 +42,6 @@ module k12a(
     logic               alu_condition;
     logic               alu_load;
     alu_operand_sel_t   alu_operand_sel;
-    logic               async_write;
     logic [7:0]         b;
     logic               b_store;
     logic [7:0]         c;
@@ -49,7 +49,6 @@ module k12a(
     logic               c_store;
     logic               cd_load;
     cd_sel_t            cd_sel;
-    logic               cpu_clock;
     logic [7:0]         d;
     logic               d_load;
     logic               d_store;
@@ -73,13 +72,6 @@ module k12a(
     state_t             state;
 
     assign halted = state == STATE_HALT;
-
-    k12a_clock_ctl clock_ctl(
-        .sys_clock(sys_clock),
-        .reset_n(reset_n),
-        .cpu_clock(cpu_clock),
-        .async_write(async_write)
-    );
 
     k12a_fsm fsm(
         .inst(inst),
