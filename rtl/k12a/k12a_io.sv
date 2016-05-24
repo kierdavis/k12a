@@ -62,7 +62,7 @@ module k12a_io(
     
     assign lcd_rw = 1'h0;
     assign lcd_en = lcd_xfer & async_write;
-    assign lcd_data = data_bus;
+    assign lcd_data = lcd_buffer;
     
     assign sevenseg0_mode = control[0];
     assign sevenseg1_mode = control[1];
