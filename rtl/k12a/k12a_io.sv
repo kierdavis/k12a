@@ -75,7 +75,6 @@ module k12a_io(
     assign data_bus = (io_load & (io_addr == 3'h1)) ? buttons : 8'hzz;
     assign data_bus = (io_load & (io_addr == 3'h2)) ? leds : 8'hzz;
     assign data_bus = (io_load & (io_addr == 3'h4)) ? {spi1_busy, spi0_busy, 1'h0, control} : 8'hzz;
-    assign data_bus = (io_load & (io_addr == 3'h5)) ? lcd_buffer : 8'hzz;
     
     assign spi0_data_io_load  = io_load  & (io_addr == 3'h6);
     assign spi0_data_io_store = io_store & (io_addr == 3'h6);
