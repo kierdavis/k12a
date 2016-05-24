@@ -39,7 +39,6 @@ module k12a_io(
     logic [6:0] sevenseg0_decoded;
     logic [6:0] sevenseg1_decoded;
     logic [4:0] control;
-    logic [7:0] lcd_buffer;
     
     logic sevenseg0_mode;
     logic sevenseg1_mode;
@@ -62,7 +61,6 @@ module k12a_io(
     
     assign lcd_rw = 1'h0;
     assign lcd_en = lcd_xfer & async_write;
-    assign lcd_data = lcd_buffer;
     
     assign sevenseg0_mode = control[0];
     assign sevenseg1_mode = control[1];
@@ -87,14 +85,14 @@ module k12a_io(
             sevenseg1_buffer <= 8'h00;
             leds <= 8'h00;
             control <= 5'h00;
-            lcd_buffer <= 8'h00;
+            lcd_data <= 8'h00;
         end
         else begin
             sevenseg0_buffer <= (io_store & (io_addr == 3'h0)) ? data_bus : sevenseg0_buffer;
             sevenseg1_buffer <= (io_store & (io_addr == 3'h1)) ? data_bus : sevenseg1_buffer;
             leds             <= (io_store & (io_addr == 3'h2)) ? data_bus : leds;
             control          <= (io_store & (io_addr == 3'h4)) ? data_bus[4:0] : control;
-            lcd_buffer       <= (io_store & (io_addr == 3'h5)) ? data_bus : lcd_buffer;
+            lcd_data         <= (io_store & (io_addr == 3'h5)) ? data_bus : lcd_data;
         end
     end
     
